@@ -55,7 +55,7 @@ USRLIBDIR = /usr/lib
 LOCLIBDIR = /usr/local/lib
 DSTDIRS = $(DSTROOT)$(USRLIBDIR) $(DSTROOT)$(LOCLIBDIR)
 
-INSTALLSRC_FILES = Makefile crt.c icplusplus.c lazy_dylib_loader.c start.s dyld_glue.s lazy_dylib_helper.s
+INSTALLSRC_FILES = Makefile crt.c icplusplus.c lazy_dylib_loader.c start.S dyld_glue.S lazy_dylib_helper.S
 
 INTERMEDIATE_FILES =	\
 			$(SYMROOT)/crt1.v1.o  $(SYMROOT)/crt1.v2.o $(SYMROOT)/crt1.v3.o $(SYMROOT)/crt1.v4.o \
@@ -68,36 +68,36 @@ INTERMEDIATE_FILES =	\
 all: $(INTERMEDIATE_FILES) 
 
 
-$(SYMROOT)/crt1.v1.o: start.s crt.c dyld_glue.s 
+$(SYMROOT)/crt1.v1.o: start.S crt.c dyld_glue.S 
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V1) -mdynamic-no-pic -nostdlib -keep_private_externs $^ -o $@  -DCRT -DOLD_LIBSYSTEM_SUPPORT
 
-$(SYMROOT)/crt1.v2.o: start.s crt.c dyld_glue.s 
+$(SYMROOT)/crt1.v2.o: start.S crt.c dyld_glue.S 
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V2) -nostdlib -keep_private_externs $^ -o $@  -DCRT
 
-$(SYMROOT)/crt1.v3.o: start.s crt.c
+$(SYMROOT)/crt1.v3.o: start.S crt.c
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V3) -nostdlib -keep_private_externs $^ -o $@  -DADD_PROGRAM_VARS 
 
-$(SYMROOT)/crt1.v4.o: start.s crt.c
+$(SYMROOT)/crt1.v4.o: start.S crt.c
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V4) -nostdlib -keep_private_externs $^ -o $@  -DADD_PROGRAM_VARS 
 
 
-$(SYMROOT)/crt0.o: start.s crt.c
+$(SYMROOT)/crt0.o: start.S crt.c
 	$(CC) -r $(ARCH_CFLAGS) -Os -static -Wl,-new_linker -nostdlib -keep_private_externs $^ -o $@ 
 
 
-$(SYMROOT)/dylib1.v1.o: dyld_glue.s icplusplus.c
+$(SYMROOT)/dylib1.v1.o: dyld_glue.S icplusplus.c
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V1)  -nostdlib -keep_private_externs $^ -o $@  -DCFM_GLUE
 
-$(SYMROOT)/dylib1.v2.o: dyld_glue.s
+$(SYMROOT)/dylib1.v2.o: dyld_glue.S
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V2)  -nostdlib -keep_private_externs $^ -o $@  -DCFM_GLUE
 		
 
-$(SYMROOT)/bundle1.v1.o: dyld_glue.s
+$(SYMROOT)/bundle1.v1.o: dyld_glue.S
 	$(CC) -r $(ARCH_CFLAGS) -Os $(OS_MIN_V1)  -nostdlib -keep_private_externs $^ -o $@ 
 
 
 
-$(SYMROOT)/lazydylib1.o: lazy_dylib_helper.s lazy_dylib_loader.c 
+$(SYMROOT)/lazydylib1.o: lazy_dylib_helper.S lazy_dylib_loader.c 
 	$(CC) -r $(ARCH_CFLAGS) -Os -nostdlib -keep_private_externs $^ -o $@ 
 
 clean:
