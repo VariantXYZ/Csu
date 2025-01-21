@@ -22,7 +22,11 @@
  * @APPLE_LICENSE_HEADER_END@
  */
 
+#if __has_include(<Availability.h>)
 #include <Availability.h>
+#else
+#include <AvailabilityMacros.h>
+#endif
 
 #if __ppc__ && __DYNAMIC__
 //
